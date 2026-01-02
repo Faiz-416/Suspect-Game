@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Global Native Feel Settings */
+* {
+  -webkit-user-select: none; /* Disable copy/paste selection */
+  user-select: none;
+  -webkit-touch-callout: none; /* Disable long-press menu */
+  -webkit-tap-highlight-color: transparent; /* Disable tap gray box */
+}
+
+/* 2. Re-enable selection for Inputs only */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* 3. Original Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0F0F14;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #FFFFFF;
+}
