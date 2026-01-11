@@ -6,6 +6,7 @@ import { AppScreen, GameMode, GameState, Player, CATEGORIES } from './types';
 import { setupGame1, setupGame2, getRandomQuestion, getRandomWordPair } from './services/gameLogic';
 import { Button, Card, Heading, SubHeading, ScreenContainer, Input, ConfirmationModal, InfoModal } from './components/UI';
 import { ANIMATION_DURATION } from './constants';
+import icon from './assets/icon.png';
 
 const formatName = (s: string) => {
   if (!s) return '';
@@ -76,11 +77,10 @@ const App = () => {
     setShowExitConfirm(false);
   };
 
-  const addPlayer = () => {
-    const capName = formatName(playerNameInput);
+  const addPlayer = (name: string) => {
+    const capName = formatName(name);
     if (!capName || state.players.some(p => p.name === capName)) return;
     setState(prev => ({ ...prev, players: [...prev.players, { id: crypto.randomUUID(), name: capName, avatarSeed: 0, isImpostor: false, score: 0 }] }));
-    setPlayerNameInput('');
   };
 
   const removePlayer = (id: string) => {
@@ -88,8 +88,6 @@ const App = () => {
   };
 
   const proceedToGameSetup = () => {
-    if (state.players.length < 3) return; // Simple validation
-
     if (state.activeGame === GameMode.NUMBER_JUSTIFY) {
       const q = getRandomQuestion();
       setState(prev => ({
@@ -173,7 +171,8 @@ const App = () => {
 
   const renderHome = () => (
     <div className="flex flex-col h-full justify-center space-y-6">
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 flex flex-col items-center">
+        <img src={icon} alt="App Icon" className="w-24 h-24 mb-4 rounded-[20px] shadow-2xl" />
         <h1 className="text-5xl font-black tracking-tighter text-white mb-2">SUSPECT</h1>
         <p className="text-[#B3B3C6]">The social deduction party game</p>
       </div>
@@ -204,9 +203,17 @@ const App = () => {
             placeholder="Enter name..."
             value={playerNameInput}
             onChange={(e) => setPlayerNameInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
+            onKeyDown={(e) => {
+                if(e.key === 'Enter') {
+                    addPlayer(playerNameInput);
+                    setPlayerNameInput('');
+                }
+            }}
           />
-          <Button onClick={addPlayer} className="!w-auto !px-4"><LucidePlus /></Button>
+          <Button onClick={() => {
+              addPlayer(playerNameInput);
+              setPlayerNameInput('');
+          }} className="!w-auto !px-4"><LucidePlus /></Button>
         </div>
 
         <div className="space-y-2">
